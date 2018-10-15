@@ -1,0 +1,75 @@
+spring.application.name: order-server
+ali.host.name: 127.0.0.1
+bbc.host.name: 127.0.0.1
+server:
+  port: 8089
+
+spring:
+  datasource:
+      url: jdbc:mysql://${ali.host.name}:3306/springcloud?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false
+      username: root
+      password: 123456
+      driverClassName: com.mysql.jdbc.Driver
+      platform: mysql
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+management:
+  endpoints:
+    web:
+      base-path: /
+      path-mapping:
+        health: health
+  health:
+    refresh:
+      enabled: false
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://microideal:microideal@${ali.host.name}:8080/eureka/
+
+#作用：user-info-uri,token-info-uri二者皆是为了check token，并且顺带返回了用户信息。配置信息位置在资源服务器上。
+#user-info-uri原理是在授权服务器认证后将认证信息Principal通过形参绑定的方法通过URL的方式获取用户信息,当然它也有配套的UserInfoTokenService等等
+security:
+  oauth2:
+    client:
+      clientId: android
+      clientSecret: android  #这里配置是为了能被ResourceServerConfig中读取到
+    resource:
+#      id: order-server
+      user-info-uri: http://${bbc.host.name}:8081/auth/user
+      token-info-uri: http://${bbc.host.name}:8081/auth/oauth/check_token
+      prefer-token-info: true  #更倾向使用token-info-uri
+    authorization:
+      check-token-access: http://${bbc.host.name}:8081/auth/oauth/check_token
+
+
+
+#第一行多个单词不可骆驼，只能分割
+system-employee:
+  id: 100000
+  username: "microideal"
+  district: "蜀山区"
+
+districts:
+  -
+    id: 1001
+    name: "庐阳区"
+  -
+    id: 1002
+    name: "蜀山区"
+  -
+    id: 1003
+    name: "包河区"
+  -
+    id: 1004
+    name: "瑶海区"
+
+
+
+
+

@@ -1,0 +1,50 @@
+spring.application.name: zuul
+ali.host.name: 127.0.0.1
+bbc.host.name: 127.0.0.1
+
+server:
+  port: 8086
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://microideal:microideal@${ali.host.name}:8080/eureka/
+
+zuul:
+  routes:
+    auth:
+      path: /auth/**
+      sensitiveHeaders:
+      url: http://${ali.host.name}:8088   #docker只识ip
+#      serviceId: auth-server    //这是个坑  docker不识别
+    order:
+      path: /order/**
+      sensitiveHeaders:
+      url: http://${ali.host.name}:8089
+#      serviceId: order-server
+  add-proxy-headers: true
+  retryable: true #�������Ի���
+  host:
+    connect-timeout-millis: 3000
+    socket-timeout-millis: 3000
+
+ribbon:
+ OkToRetryOnAllOperations: true  #�����������������������
+ ConnectTimeout: 3000    #ribbon�������ӵĳ�ʱʱ��
+ ReadTimeout: 3000      #������ĳ�ʱʱ��
+ MaxAutoRetries: 0      #�Ե�ǰ��������Դ�������һ�η����9082��ʱ�����404����������MaxAutoRetries�Σ��������404�����л�����������MaxAutoRetriesNextServer������
+ MaxAutoRetriesNextServer: 1    #�л�����Ĵ���
+
+hystrix:
+ command:
+  default:
+   execution:
+    timeout:
+      enabled: true    #Hystrix�Ƿ����ó�ʱʱ��
+    isolation:
+     thread:
+      timeoutInMilliseconds: 60000   #Hystrix��·���ĳ�ʱʱ�䣬Ĭ����1s����·���ĳ�ʱʱ����Ҫ����ribbon�ĳ�ʱʱ�䣬��Ȼ���ᴥ�����ԡ�
+
+
+
+

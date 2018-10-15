@@ -1,0 +1,54 @@
+spring.application.name: auth-server
+ali.host.name: 127.0.0.1
+bbc.host.name: 127.0.0.1
+server:
+  port: 8088
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://microideal:microideal@${ali.host.name}:8080/eureka/
+
+logging.level.org.springframework.security: DEBUG
+logging.level.org.springframework: DEBUG
+
+
+security:
+  oauth2:
+    resource:
+#      id: user-server   在资源配置类中配置后，这里自动配置就失效
+      user-info-uri: http://${bbc.host.name}:8081/auth/user
+      token-info-uri: http://${bbc.host.name}:8081/auth/oauth/check_token
+      prefer-token-info: true
+
+management:
+  endpoints:
+    web:
+      base-path: /
+      path-mapping:
+        health: health
+  health:
+    refresh:
+      enabled: false
+
+spring:
+  redis:
+      host: 106.12.26.55
+      port: 6379    #docker涉及到的端口   阿里云安全组都要放开
+  datasource:
+    url: jdbc:mysql://${ali.host.name}:3306/springcloud?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false
+    username: root
+    password: 123456
+    driverClassName: com.mysql.jdbc.Driver
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+
+
+
+
+
+    #http://localhost:8081/auth/oauth/token?grant_type=password&username=microideal&password=123456&client_id=android&client_secret=android

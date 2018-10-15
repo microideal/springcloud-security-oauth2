@@ -1,0 +1,13 @@
+server:
+  port: 8080
+host.name: 127.0.0.1
+eureka:
+  instance:
+    leaseExpirationDurationInSeconds: 10
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://microideal:microideal@${host.name}:8080/eureka/
