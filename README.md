@@ -1,5 +1,5 @@
 # springcloud-security-oauth2
-springcloud密码模式，可用于前后分离
+密码模式，可用于前后分离
 
 
 1.执行user.sql,使用的是redistoken，把auth-server配置文件中关于redis和mysql的配置改成自己的，
