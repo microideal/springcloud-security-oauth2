@@ -33,7 +33,7 @@ management:
 
 spring:
   redis:
-      host: 106.12.26.55
+      host:
       port: 6379    #docker涉及到的端口   阿里云安全组都要放开
   datasource:
     url: jdbc:mysql://${ali.host.name}:3306/springcloud?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false
